@@ -14,9 +14,14 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
 project(nbfs C CXX)
+
+# conan系统对于头文件的依赖处理
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+# conan的基础设置
+conan_basic_setup()
 
 set(CMAKE_BUILD_TYPE "Debug")
 
@@ -24,19 +29,25 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CXX_FLAGS -std=c++1y
                   -g
                   -Wall
-                  -Wno-unused)
+                  -Wno-unused
+                  -fPIC
+                  -DFOLLY_HAVE_CLOCK_GETTIME=1)
     string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CXX_FLAGS -std=c++1y
-                  -O2)
+                  -O2
+                  -fPIC
+                  -DFOLLY_HAVE_CLOCK_GETTIME=1)
     string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 endif()
 
-if(APPLE)
-    set(CMAKE_CXX_COMPILER "clang++")
-elseif(UNIX)
-    set(CMAKE_CXX_COMPILER "g++")
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/)
+
+#if(APPLE)
+#    set(CMAKE_CXX_COMPILER "clang++")
+#elseif(UNIX)
+#    set(CMAKE_CXX_COMPILER "g++")
+#endif()
 
 
 message(STATUS "build type     =" ${CMAKE_BUILD_TYPE})
@@ -51,16 +62,25 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # 利用find_package实现对于依赖包的安装处理
-
+find_package(Boost REQUIRED COMPONENTS SYSTEM thread filesystem)
+find_package(OpenSSL REQUIRED)
+find_package(Threads REQUIRED)
+find_library(GLOG_LIBRARY_PATH glog)
+find_library(GFLAGS_LIBRARY_PATH gflags)
+find_package(Folly REQUIRED)
+find_package(Wangle REQUIRED)
+find_package(Proxygen REQUIRED COMPONENTS proxygenhttpserver proxygenlib)
 
 # 利用include_directories索引对应的头文件
-#include_directories()
+include_directories(
+    ${FOLLY_INCLUDE_DIR}
+    )
 
 # 利用link_directories连接的目录
 #link_directories()
 
 # 完成对于lib的编译
-#add_subdirectory()
+add_subdirectory(nebula)
 
 
 set(SRC_LIST
@@ -70,6 +90,6 @@ set(SRC_LIST
 
 add_executable(nbfs_server ${SRC_LIST})
 #target_link_libraries(nbfs_server nbfs_directory nbfs_store)
-target_link_libraries(nbfs_server)
+target_link_libraries(nbfs_server net base)
 
 

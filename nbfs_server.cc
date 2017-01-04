@@ -17,11 +17,16 @@
 
 #include "nbfs_server.h"
 
-using namespace std;
+bool NbfsServer::Initialize() {
 
-int main() {
+	std::cout << __FILE__ << "--" << __FUNCTION__ << std::endl;
+
+	return true;
+}
+
+int main(int argc, char* argv[]) {
 
 	std::cout << "test ..." << std::endl;
 
-	return 0;
+	return nebula::DoMain<NbfsServer>(argc, argv);
 }

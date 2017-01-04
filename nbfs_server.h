@@ -18,9 +18,19 @@
 #ifndef NBFS_NBFS_SERVER_H_
 #define NBFS_NBFS_SERVER_H_
 
+#include "nebula/nebula/net/base_server.h"
 
-#include <iostream>
-#include <string>
+class NbfsServer: public nebula::BaseServer {
+	public:
+		NbfsServer() = default;
+		~NbfsServer() = default;
 
+	protected:
+		bool Initialize() override;
+
+		bool Run() override {
+			return BaseServer::Run();
+		}
+};
 
 #endif /* NBFS_NBFS_SERVER_H_ */
