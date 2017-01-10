@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, https://github.com/nebula-im
+ *  Copyright (c) 2016, https://github.com/zhatalk
  *  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +15,22 @@
  * limitations under the License.
  */
 
-#include "nbfs_server.h"
+#include "msfs/msfs_server.h"
 
-#include <iostream>
+#include "msfs/msfs_http_handler.h"
 
-bool NbfsServer::Initialize() {
-
-	std::cout << __FILE__ << "--" << __FUNCTION__ << std::endl;
-
-	return true;
+bool MsfsServer::Initialize() {
+  // 注册服务
+  RegisterService("msfs_server", "http_server", "http");
+  
+  return BaseServer::Initialize();
 }
 
+bool MsfsServer::Run() {
+  return BaseServer::Run();
+}
+
+
 int main(int argc, char* argv[]) {
-
-	std::cout << "test ..." << std::endl;
-
-	return nebula::DoMain<NbfsServer>(argc, argv);
+  return nebula::DoMain<MsfsServer>(argc, argv);
 }

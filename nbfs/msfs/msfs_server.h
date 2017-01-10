@@ -15,20 +15,23 @@
  * limitations under the License.
  */
 
-#include "nbfs_server.h"
+#ifndef	MSFS_MSFS_SERVER_H_
+#define	MSFS_MSFS_SERVER_H_
 
-#include <iostream>
+#include <folly/io/async/EventBase.h>
 
-bool NbfsServer::Initialize() {
+#include "nebula/net/base_server.h"
 
-	std::cout << __FILE__ << "--" << __FUNCTION__ << std::endl;
+class MsfsServer : public nebula::BaseServer {
+public:
+  MsfsServer() = default;
+  ~MsfsServer() override = default;
+  
+protected:
+  // From BaseServer
+  bool Initialize() override;
+  bool Run() override;
+};
 
-	return true;
-}
+#endif // MSFS_MSFS_SERVER_H_
 
-int main(int argc, char* argv[]) {
-
-	std::cout << "test ..." << std::endl;
-
-	return nebula::DoMain<NbfsServer>(argc, argv);
-}

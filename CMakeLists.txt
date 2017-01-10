@@ -19,9 +19,9 @@ cmake_minimum_required(VERSION 2.8)
 project(nbfs C CXX)
 
 # conan系统对于头文件的依赖处理
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+#include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 # conan的基础设置
-conan_basic_setup()
+#conan_basic_setup()
 
 set(CMAKE_BUILD_TYPE "Debug")
 
@@ -74,13 +74,17 @@ find_package(Proxygen REQUIRED COMPONENTS proxygenhttpserver proxygenlib)
 # 利用include_directories索引对应的头文件
 include_directories(
     ${FOLLY_INCLUDE_DIR}
+    ${PROJECT_SOURCE_DIR}/nebula
     )
 
 # 利用link_directories连接的目录
-#link_directories()
+link_directories(
+  /usr/local/lib
+)
 
 # 完成对于lib的编译
-add_subdirectory(nebula)
+add_subdirectory(nebula/nebula)
+add_subdirectory(nbfs)
 
 
 set(SRC_LIST

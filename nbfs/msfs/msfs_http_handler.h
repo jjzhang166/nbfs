@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, https://github.com/nebula-im
+ *  Copyright (c) 2016, https://github.com/zhatalk
  *  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +15,19 @@
  * limitations under the License.
  */
 
-#include "nbfs_server.h"
+#ifndef	MSFS_MSFS_HTTP_HANDLER_H_
+#define	MSFS_MSFS_HTTP_HANDLER_H_
 
-#include <iostream>
+#include "nebula/net/handler/http/http_request_handler.h"
 
-bool NbfsServer::Initialize() {
+void MsfsUploadFileHandler(const proxygen::HTTPMessage& headers,
+                           folly::IOBufQueue* body,
+                           proxygen::ResponseBuilder* r);
 
-	std::cout << __FILE__ << "--" << __FUNCTION__ << std::endl;
+void MsfsDownloadFileHandler(const proxygen::HTTPMessage& headers,
+                             folly::IOBufQueue* body,
+                             proxygen::ResponseBuilder* r);
 
-	return true;
-}
 
-int main(int argc, char* argv[]) {
-
-	std::cout << "test ..." << std::endl;
-
-	return nebula::DoMain<NbfsServer>(argc, argv);
-}
+#endif // MSFS_MSFS_HTTP_HANDLER_H_
+  
