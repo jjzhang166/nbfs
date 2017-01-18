@@ -15,27 +15,11 @@
  * limitations under the License.
  */
 
-#ifndef	MSFS_MSFS_SERVER_H_
-#define	MSFS_MSFS_SERVER_H_
+#include "msfs/msfs_file_manager.h"
 
-#include <folly/io/async/EventBase.h>
+folly::Singleton<MsfsFileManager> g_msfs_file_manager;
 
-#include "nebula/net/base_server.h"
-
-class MsfsServer : public nebula::BaseServer {
-public:
-  MsfsServer() = default;
-  ~MsfsServer() override = default;
-  
-protected:
-  // From BaseServer
-  bool Initialize() override;
-  bool Run() override;
-};
-
-#endif // MSFS_MSFS_SERVER_H_
-
-//struct ConfigInfo {
-//  std::string msfs_root;
-//};
+std::shared_ptr<MsfsFileManager> MsfsFileManager::GetInstance() {
+  return g_msfs_file_manager.try_get();
+}
 

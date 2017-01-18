@@ -15,27 +15,30 @@
  * limitations under the License.
  */
 
-#ifndef	MSFS_MSFS_SERVER_H_
-#define	MSFS_MSFS_SERVER_H_
+#ifndef	MSFS_MSFS_FILE_MANAGER_H_
+#define	MSFS_MSFS_FILE_MANAGER_H_
 
-#include <folly/io/async/EventBase.h>
+#include <folly/Singleton.h>
 
-#include "nebula/net/base_server.h"
+#include "nebula/base/lru_cache.h"
 
-class MsfsServer : public nebula::BaseServer {
+static const size_t kMaxCacheSize = 10000;
+
+class MsfsFileManager {
 public:
-  MsfsServer() = default;
-  ~MsfsServer() override = default;
+  ~MsfsFileManager() = default;
+
+  static std::shared_ptr<MsfsFileManager> GetInstance();
   
-protected:
-  // From BaseServer
-  bool Initialize() override;
-  bool Run() override;
+private:
+  friend class folly::Singleton<MsfsFileManager>;
+  MsfsFileManager()
+    : cache_(kMaxCacheSize) {
+      
+  }
+  
+  nebula::LRUCache<std::string, std::string> cache_;
+  // (100);
 };
 
-#endif // MSFS_MSFS_SERVER_H_
-
-//struct ConfigInfo {
-//  std::string msfs_root;
-//};
-
+#endif // MSFS_MSFS_FILE_MANAGER_H_

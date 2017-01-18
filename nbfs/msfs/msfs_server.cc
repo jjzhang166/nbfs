@@ -30,7 +30,6 @@ bool MsfsServer::Run() {
   return BaseServer::Run();
 }
 
-
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {  
   return nebula::DoMain<MsfsServer>(argc, argv);
 }

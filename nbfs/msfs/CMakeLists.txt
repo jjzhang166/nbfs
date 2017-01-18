@@ -21,6 +21,8 @@ set (SRC_LIST
   msfs_server.h
   msfs_http_handler.cc
   msfs_http_handler.h
+  msfs_file_manager.cc
+  msfs_file_manager.h
   README.md
  )
 
